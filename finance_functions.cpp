@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "finance_functions.h"
+#include <math.h>
 #include <string.h>
 
 extern const int kind;
@@ -9,47 +10,47 @@ extern finance_node* finance_head;
 extern int lenth_node;
 
 /**
- * ´Ëº¯ÊıÊÇ²ÆÎñ¹ÜÀíÖĞµÄÌí¼ÓÊÕÈë/Ö§³ö¼ÇÂ¼µÄ¹¦ÄÜº¯Êı
+ * æ­¤å‡½æ•°æ˜¯è´¢åŠ¡ç®¡ç†ä¸­çš„æ·»åŠ æ”¶å…¥/æ”¯å‡ºè®°å½•çš„åŠŸèƒ½å‡½æ•°
  * @param user_id
  */
 void new_finance_record(int user_id){
 
-    //ÏÈ´ò¿ªuser_id¶ÔÓ¦µÄ´æ´¢Êı¾İµÄÎÄ¼ş ¶ÔÓ¦µÄÎÄ¼şÃûÎªuser_id_finance.txt
+    //å…ˆæ‰“å¼€user_idå¯¹åº”çš„å­˜å‚¨æ•°æ®çš„æ–‡ä»¶ å¯¹åº”çš„æ–‡ä»¶åä¸ºuser_id_finance.txt
     char file_name[20];
     sprintf(file_name, "%d%s", user_id, "_finance.txt");
     FILE* fp = NULL;
-    //´Ëº¯ÊıµÄ¹¦ÄÜÖ»ÊÇÌí¼Ó¼ÇÂ¼£¬ËùÒÔÓÃab+´ò¿ªÎÄ¼ş
+    //æ­¤å‡½æ•°çš„åŠŸèƒ½åªæ˜¯æ·»åŠ è®°å½•ï¼Œæ‰€ä»¥ç”¨ab+æ‰“å¼€æ–‡ä»¶
     fp = fopen(file_name, "ab+");
     if(fp == NULL){
-        printf("ÎÄ¼ş´ò¿ªÊ§°Ü£¡\n");
+        printf("æ–‡ä»¶æ‰“å¼€å¤±è´¥ï¼\n");
         return;
     }
 
     struct finance_data new_data;
 
-    printf("´ıÌí¼ÓµÄÏîÄ¿ÊÇÖ§³ö»¹ÊÇÊÕÈë£¿Ö§³öÊäÈë0£¬ÊÕÈëÊäÈë1¡£\n");
+    printf("å¾…æ·»åŠ çš„é¡¹ç›®æ˜¯æ”¯å‡ºè¿˜æ˜¯æ”¶å…¥ï¼Ÿæ”¯å‡ºè¾“å…¥0ï¼Œæ”¶å…¥è¾“å…¥1ã€‚\n");
     int choice1 = 0;
     int choice2 = 0;
     while( (scanf("%d", &choice1)) != 1 || choice1<0 || choice1>1){
-        printf("ÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë£¡\n");
+        printf("è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼\n");
         fflush(stdin);
     }
 
     switch(choice1){
         case 0 :
-            //ÌáÊ¾ÓÃ»§ÊäÈë
-            printf("Çë°´ÕÕ£º¡°Äê.ÔÂ.ÈÕ »¨·ÑÏîÄ¿ ½ğ¶î¡±µÄ¸ñÊ½ÊäÈë¡£\n");
+            //æç¤ºç”¨æˆ·è¾“å…¥
+            printf("è¯·æŒ‰ç…§ï¼šâ€œå¹´.æœˆ.æ—¥ èŠ±è´¹é¡¹ç›® é‡‘é¢â€çš„æ ¼å¼è¾“å…¥ã€‚\n");
             while((scanf("%d.%d.%d %s %lf", &(new_data.year), &(new_data.month), &(new_data.day),
                     new_data.name,&(new_data.value))) != 5 || new_data.year<=0 || new_data.month>12
                     || new_data.month<=0 || new_data.day<=0 ||new_data.day>31 || new_data.value<0) {
                 fflush(stdin);
-                printf("ÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë£¡\n");
+                printf("è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼\n");
             }
-            //ÒòÎªÊÇÖ§³ö£¬ËùÒÔ½«value·´ºÅ±ä³É¸ºÊı
+            //å› ä¸ºæ˜¯æ”¯å‡ºï¼Œæ‰€ä»¥å°†valueåå·å˜æˆè´Ÿæ•°
             new_data.value = -new_data.value;
 
-            printf("Çë´ÓÏÂÃæµÄÑ¡ÏîÖĞÑ¡ÔñÏû·ÑµÄÀàĞÍ¡£\n");
-            //µÚÒ»¸öÊÇÊÕÈë£¬ËùÒÔiµÄ³õÊ¼»¯ÖµÎª1£¬Ìø¹ıÊÕÈë
+            printf("è¯·ä»ä¸‹é¢çš„é€‰é¡¹ä¸­é€‰æ‹©æ¶ˆè´¹çš„ç±»å‹ã€‚\n");
+            //ç¬¬ä¸€ä¸ªæ˜¯æ”¶å…¥ï¼Œæ‰€ä»¥içš„åˆå§‹åŒ–å€¼ä¸º1ï¼Œè·³è¿‡æ”¶å…¥
             for(int i = 1; i<kind; i++){
                 printf("%d.%-7s", i, CATEGORY[i]);
                 if(i%5==0){
@@ -59,31 +60,31 @@ void new_finance_record(int user_id){
             printf("\n");
 
             while((scanf("%d", &choice2)) !=1 || choice2<=0 || choice2>(kind-1)){
-                printf("ÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë£¡\n");
+                printf("è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼\n");
                 fflush(stdin);
             }
             strcpy(new_data.category, CATEGORY[choice2]);
-            //È·ÈÏÓÃ»§ÊäÈë
-            printf("ÄãÊäÈëÁË£º\nÏû·ÑÊ±¼ä£º%d.%d.%d Ïû·ÑÏîÄ¿£º%s ½ğ¶î£º%.2lf Ïû·ÑÀàĞÍ£º%s\n", new_data.year, new_data.month,
+            //ç¡®è®¤ç”¨æˆ·è¾“å…¥
+            printf("ä½ è¾“å…¥äº†ï¼š\næ¶ˆè´¹æ—¶é—´ï¼š%d.%d.%d æ¶ˆè´¹é¡¹ç›®ï¼š%s é‡‘é¢ï¼š%.2lf æ¶ˆè´¹ç±»å‹ï¼š%s\n", new_data.year, new_data.month,
                     new_data.day, new_data.name,-new_data.value, new_data.category);
             if(fwrite(&new_data, sizeof(struct finance_data), 1, fp) == 1){
-                printf("Ìí¼Ó³É¹¦£¡\n");
+                printf("æ·»åŠ æˆåŠŸï¼\n");
             }
             insert_head_finance_node(new_data);
             break;
         case 1 :
-            printf("Çë°´ÕÕ£º¡±Äê.ÔÂ.ÈÕ ÊÕÈë½ğ¶î¡°µÄ¸ñÊ½½øĞĞÊäÈë¡£\n");
+            printf("è¯·æŒ‰ç…§ï¼šâ€å¹´.æœˆ.æ—¥ æ”¶å…¥é‡‘é¢â€œçš„æ ¼å¼è¿›è¡Œè¾“å…¥ã€‚\n");
             while((scanf("%d.%d.%d %lf", &(new_data.year), &(new_data.month), &(new_data.day),
                     &(new_data.value))) != 4 || new_data.value<0 || new_data.year<=0||new_data.month>12 ||
                     new_data.month<=0 || new_data.day<=0 ||new_data.day>31){
-                printf("ÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë£¡\n");
+                printf("è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼\n");
                 fflush(stdin);
             }
             strcpy(new_data.name, "void");
             strcpy(new_data.category, CATEGORY[0]);
-            printf("ÄãÊäÈëÁË£º\n%d.%d.%d ÊÕÈë%.2lf\n", new_data.year, new_data.month, new_data.day, new_data.value);
+            printf("ä½ è¾“å…¥äº†ï¼š\n%d.%d.%d æ”¶å…¥%.2lf\n", new_data.year, new_data.month, new_data.day, new_data.value);
             if(fwrite(&new_data,sizeof(struct finance_data), 1, fp) == 1){
-                printf("Ìí¼Ó³É¹¦£¡\n");
+                printf("æ·»åŠ æˆåŠŸï¼\n");
             }
             insert_head_finance_node(new_data);
             break;
@@ -94,7 +95,7 @@ void new_finance_record(int user_id){
 }
 
 /**
- * ´Ëº¯ÊıÓÃÓÚĞŞ¸ÄÒÑ¾­´æÔÚµÄ¼ÇÂ¼¡£
+ * æ­¤å‡½æ•°ç”¨äºä¿®æ”¹å·²ç»å­˜åœ¨çš„è®°å½•ã€‚
  * @param user_id
  */
 void update_finance_record(int user_id){
@@ -104,15 +105,15 @@ void update_finance_record(int user_id){
     FILE* fp = NULL;
     fp = fopen(file_name, "wb");
     if(fp == NULL){
-        printf("ÎÄ¼ş´ò¿ªÊ§°Ü£¡\n");
+        printf("æ–‡ä»¶æ‰“å¼€å¤±è´¥ï¼\n");
         return;
     }
 
     show_all_finance_node();
-    printf("ÊäÈë¼ÇÂ¼Ç°µÄĞòºÅÒÔĞŞ¸Ä¼ÇÂ¼¡£\n");
+    printf("è¾“å…¥è®°å½•å‰çš„åºå·ä»¥ä¿®æ”¹è®°å½•ã€‚\n");
     int lable_in = 0;
     while(scanf("%d", &lable_in) !=1 || lable_in<1 || lable_in > lenth_node){
-        printf("ÊäÈëÓĞÎó£¡ÇëÖØĞÂÊäÈë¡£\n");
+        printf("è¾“å…¥æœ‰è¯¯ï¼è¯·é‡æ–°è¾“å…¥ã€‚\n");
         fflush(stdin);
     }
 
@@ -136,32 +137,32 @@ void update_finance_node_by_lable(int lable){
     }
 
     if(strcmp(search->data.category, CATEGORY[0]) ==0 ){
-        printf("ÄãÑ¡ÔñµÄÊÇ£º\n");
+        printf("ä½ é€‰æ‹©çš„æ˜¯ï¼š\n");
         show_finance_node_by_pointer(search);
-        printf("ÇëÊäÈëÒªĞŞ¸ÄµÄ½ğ¶î¡£\n");
+        printf("è¯·è¾“å…¥è¦ä¿®æ”¹çš„é‡‘é¢ã€‚\n");
         double new_value = 0;
         while(scanf("%lf", &new_value) !=1 || new_value<=0){
-            printf("ÊäÈëÓĞÎó£¡ÇëÖØĞÂÊäÈë¡£\n");
+            printf("è¾“å…¥æœ‰è¯¯ï¼è¯·é‡æ–°è¾“å…¥ã€‚\n");
             fflush(stdin);
         }
         search->data.value = new_value;
     }else{
         int choice2 =0;
         finance_data new_data = search->data;
-        printf("ÄãÑ¡ÔñµÄÊÇ£º\n");
+        printf("ä½ é€‰æ‹©çš„æ˜¯ï¼š\n");
         show_finance_node_by_pointer(search);
-        printf("Çë°´ÕÕ£º¡°Äê.ÔÂ.ÈÕ »¨·ÑÏîÄ¿ ½ğ¶î¡±µÄ¸ñÊ½ÊäÈë¡£\n");
+        printf("è¯·æŒ‰ç…§ï¼šâ€œå¹´.æœˆ.æ—¥ èŠ±è´¹é¡¹ç›® é‡‘é¢â€çš„æ ¼å¼è¾“å…¥ã€‚\n");
         while((scanf("%d.%d.%d %s %lf", &(new_data.year), &(new_data.month), &(new_data.day),
                      new_data.name,&(new_data.value))) != 5 || new_data.year<=0 || new_data.month>12
               || new_data.month<=0 || new_data.day<=0 ||new_data.day>31 || new_data.value<0) {
             fflush(stdin);
-            printf("ÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë£¡\n");
+            printf("è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼\n");
         }
-        //ÒòÎªÊÇÖ§³ö£¬ËùÒÔ½«value·´ºÅ±ä³É¸ºÊı
+        //å› ä¸ºæ˜¯æ”¯å‡ºï¼Œæ‰€ä»¥å°†valueåå·å˜æˆè´Ÿæ•°
         new_data.value = -new_data.value;
 
-        printf("Çë´ÓÏÂÃæµÄÑ¡ÏîÖĞÑ¡ÔñÏû·ÑµÄÀàĞÍ¡£\n");
-        //µÚÒ»¸öÊÇÊÕÈë£¬ËùÒÔiµÄ³õÊ¼»¯ÖµÎª1£¬Ìø¹ıÊÕÈë
+        printf("è¯·ä»ä¸‹é¢çš„é€‰é¡¹ä¸­é€‰æ‹©æ¶ˆè´¹çš„ç±»å‹ã€‚\n");
+        //ç¬¬ä¸€ä¸ªæ˜¯æ”¶å…¥ï¼Œæ‰€ä»¥içš„åˆå§‹åŒ–å€¼ä¸º1ï¼Œè·³è¿‡æ”¶å…¥
         for(int i = 1; i<kind; i++){
             printf("%d.%-7s", i, CATEGORY[i]);
             if(i%5==0){
@@ -171,39 +172,39 @@ void update_finance_node_by_lable(int lable){
         printf("\n");
 
         while((scanf("%d", &choice2)) !=1 || choice2<=0 || choice2>(kind-1)){
-            printf("ÊäÈëÓĞÎó£¬ÇëÖØĞÂÊäÈë£¡\n");
+            printf("è¾“å…¥æœ‰è¯¯ï¼Œè¯·é‡æ–°è¾“å…¥ï¼\n");
             fflush(stdin);
         }
         strcpy(new_data.category, CATEGORY[choice2]);
-        //È·ÈÏÓÃ»§ÊäÈë
-        printf("ÄãÊäÈëÁË£º\nÏû·ÑÊ±¼ä£º%d.%d.%d Ïû·ÑÏîÄ¿£º%s ½ğ¶î£º%.2lf Ïû·ÑÀàĞÍ£º%s\n", new_data.year, new_data.month,
+        //ç¡®è®¤ç”¨æˆ·è¾“å…¥
+        printf("ä½ è¾“å…¥äº†ï¼š\næ¶ˆè´¹æ—¶é—´ï¼š%d.%d.%d æ¶ˆè´¹é¡¹ç›®ï¼š%s é‡‘é¢ï¼š%.2lf æ¶ˆè´¹ç±»å‹ï¼š%s\n", new_data.year, new_data.month,
                new_data.day, new_data.name,new_data.value, new_data.category);
-        printf("ĞŞ¸Ä³É¹¦£¡\n");
+        printf("ä¿®æ”¹æˆåŠŸï¼\n");
         search->data = new_data;
     }
     return;
 }
 
 /**
- * ´Ëº¯ÊıÓÃÓÚÉ¾³ıÄ³Ò»Ìõ¼ÇÂ¼
+ * æ­¤å‡½æ•°ç”¨äºåˆ é™¤æŸä¸€æ¡è®°å½•
  * @param user_id
  */
 void delete_finance_record(int user_id){
 
     show_all_finance_node();
-    printf("ÊäÈë¼ÇÂ¼Ç°µÄĞòºÅÒÔÉ¾³ı¼ÇÂ¼¡£\n");
+    printf("è¾“å…¥è®°å½•å‰çš„åºå·ä»¥åˆ é™¤è®°å½•ã€‚\n");
     int lable_in = 0;
     while(scanf("%d", &lable_in) !=1 || lable_in<1 || lable_in > lenth_node){
-        printf("ÊäÈëÓĞÎó£¡ÇëÖØĞÂÊäÈë¡£\n");
+        printf("è¾“å…¥æœ‰è¯¯ï¼è¯·é‡æ–°è¾“å…¥ã€‚\n");
         fflush(stdin);
     }
 
     char file_name[20];
     FILE* fp = NULL;
 
-    printf("ÄãÑ¡ÔñµÄÊÇ£º\n");
+    printf("ä½ é€‰æ‹©çš„æ˜¯ï¼š\n");
     show_finance_node_by_lable(lable_in);
-    printf("ÊÇ·ñÈ·ÈÏÉ¾³ı£¿È·ÈÏ[y] È¡Ïû[n]\n");
+    printf("æ˜¯å¦ç¡®è®¤åˆ é™¤ï¼Ÿç¡®è®¤[y] å–æ¶ˆ[n]\n");
     char confirm = 'n';
     fflush(stdin);
     scanf("%c", &confirm);
@@ -214,7 +215,7 @@ void delete_finance_record(int user_id){
             sprintf(file_name, "%d%s", user_id, "_finance.txt");
             fp = fopen(file_name, "wb");
             if(fp == NULL){
-                printf("ÎÄ¼ş´ò¿ªÊ§°Ü£¡\n");
+                printf("æ–‡ä»¶æ‰“å¼€å¤±è´¥ï¼\n");
                 return;
             }
             delete_finance_node_by_lable(lable_in);
@@ -230,16 +231,16 @@ void delete_finance_record(int user_id){
 void finance_statistics(){
 
     statistics_menu:
-    printf("1. °´Äê²é¿´¼ÇÂ¼ÒÔ¼°Í³¼ÆĞÅÏ¢¡£\n");
-    printf("2. °´ÔÂ²é¿´¼ÇÂ¼ÒÔ¼°Í³¼ÆĞÅÏ¢¡£\n");
-    printf("3. °´ÈÕ²é¿´¼ÇÂ¼ÒÔ¼°Í³¼ÆĞÅÏ¢¡£\n");
-    printf("4. °´Ê±¼ä¶Î²é¿´¼ÇÂ¼ÒÔ¼°Í³¼ÆĞÅÏ¢¡£\n");
-    printf("5. ·µ»Ø¡£\n");
-    printf("ÇëÊäÈëÑ¡ÏîÇ°Ãæ¶ÔÓ¦µÄÊı×Ö¡£\n");
+    printf("1. æŒ‰å¹´æŸ¥çœ‹è®°å½•ä»¥åŠç»Ÿè®¡ä¿¡æ¯ã€‚\n");
+    printf("2. æŒ‰æœˆæŸ¥çœ‹è®°å½•ä»¥åŠç»Ÿè®¡ä¿¡æ¯ã€‚\n");
+    printf("3. æŒ‰æ—¥æŸ¥çœ‹è®°å½•ä»¥åŠç»Ÿè®¡ä¿¡æ¯ã€‚\n");
+    printf("4. æŒ‰æ—¶é—´æ®µæŸ¥çœ‹è®°å½•ä»¥åŠç»Ÿè®¡ä¿¡æ¯ã€‚\n");
+    printf("5. è¿”å›ã€‚\n");
+    printf("è¯·è¾“å…¥é€‰é¡¹å‰é¢å¯¹åº”çš„æ•°å­—ã€‚\n");
 
     int choice1 = 0;
     while(scanf("%d", &choice1) != 1 ){
-        printf("ÊäÈëÓĞÎó£¡ÇëÖØĞÂÊäÈë¡£\n");
+        printf("è¾“å…¥æœ‰è¯¯ï¼è¯·é‡æ–°è¾“å…¥ã€‚\n");
         fflush(stdin);
     }
     switch(choice1){
@@ -254,24 +255,24 @@ void finance_statistics(){
 }
 
 void finance_statistics_by_year(){
-    printf("ÊäÈëÏëÒª²é¿´µÄÄê·İ¡£\n");
+    printf("è¾“å…¥æƒ³è¦æŸ¥çœ‹çš„å¹´ä»½ã€‚\n");
     int year_in = 0;
     while(scanf("%d", &year_in) !=1 || year_in<=0){
-        printf("ÊäÈëÓĞÎó£¡ÇëÖØĞÂÊäÈë¡£\n");
+        printf("è¾“å…¥æœ‰è¯¯ï¼è¯·é‡æ–°è¾“å…¥ã€‚\n");
         fflush(stdin);
     }
     char arg[10];
-    sprintf(arg, "%d%s", year_in, "Äê");
+    sprintf(arg, "%d%s", year_in, "å¹´");
     calculate_and_show_data(arg, year_in, 1, 1, year_in, 12, 31);
     return;
 }
 
 void finance_statistics_by_month(){
-    printf("ÊäÈëÏëÒª²é¿´µÄÔÂ·İ£¬¸ñÊ½£º¡°Äê.ÔÂ¡±¡£\n");
+    printf("è¾“å…¥æƒ³è¦æŸ¥çœ‹çš„æœˆä»½ï¼Œæ ¼å¼ï¼šâ€œå¹´.æœˆâ€ã€‚\n");
     int year_in = 0;
     int month_in = 0;
     while(scanf("%d.%d", &year_in, &month_in) !=2 || year_in<=0 || month_in<=0 ||month_in>12){
-        printf("ÊäÈëÓĞÎó£¡ÇëÖØĞÂÊäÈë¡£\n");
+        printf("è¾“å…¥æœ‰è¯¯ï¼è¯·é‡æ–°è¾“å…¥ã€‚\n");
         fflush(stdin);
     }
     char arg[10];
@@ -282,13 +283,13 @@ void finance_statistics_by_month(){
 
 void finance_statistics_by_date(){
 
-    printf("ÊäÈëÏëÒª²é¿´µÄÈÕÆÚ£¬¸ñÊ½£º¡°Äê.ÔÂ.ÈÕ¡±¡£\n");
+    printf("è¾“å…¥æƒ³è¦æŸ¥çœ‹çš„æ—¥æœŸï¼Œæ ¼å¼ï¼šâ€œå¹´.æœˆ.æ—¥â€ã€‚\n");
     int year_in = 0;
     int month_in = 0;
     int day_in = 0;
     while(scanf("%d.%d.%d", &year_in, &month_in, &day_in) !=3 || year_in<=0 || month_in<=0 ||
         month_in>12 || day_in<=0 || day_in>31){
-        printf("ÊäÈëÓĞÎó£¡ÇëÖØĞÂÊäÈë¡£\n");
+        printf("è¾“å…¥æœ‰è¯¯ï¼è¯·é‡æ–°è¾“å…¥ã€‚\n");
         fflush(stdin);
     }
     char arg[10];
@@ -298,7 +299,7 @@ void finance_statistics_by_date(){
 }
 
 void finance_statistics_by_period(){
-    printf("ÊäÈëÏëÒª²é¿´µÄÊ±¼ä¶Î£¬¸ñÊ½£º¡°ÆğÊ¼Äê.ÆğÊ¼ÔÂ.ÆğÊ¼ÈÕ ÖÕÖ¹Äê.ÖÕÖ¹ÔÂ.ÖÕÖ¹ÈÕ¡±¡£\n");
+    printf("è¾“å…¥æƒ³è¦æŸ¥çœ‹çš„æ—¶é—´æ®µï¼Œæ ¼å¼ï¼šâ€œèµ·å§‹å¹´.èµ·å§‹æœˆ.èµ·å§‹æ—¥ ç»ˆæ­¢å¹´.ç»ˆæ­¢æœˆ.ç»ˆæ­¢æ—¥â€ã€‚\n");
     int year_in1 = 0;
     int month_in1 = 0;
     int day_in1 = 0;
@@ -308,7 +309,7 @@ void finance_statistics_by_period(){
     while(scanf("%d.%d.%d %d.%d.%d", &year_in1, &month_in1, &day_in1, &year_in2, &month_in2, &day_in2) !=6 ||
         year_in1<=0 || month_in1<=0 || month_in1>12 || day_in1<=0 || day_in1>31
         || year_in2<=0 || month_in2<=0 || month_in2>12 || day_in2<=0 || day_in2>31){
-        printf("ÊäÈëÓĞÎó£¡ÇëÖØĞÂÊäÈë¡£\n");
+        printf("è¾“å…¥æœ‰è¯¯ï¼è¯·é‡æ–°è¾“å…¥ã€‚\n");
         fflush(stdin);
     }
     char arg[25];
@@ -319,11 +320,11 @@ void finance_statistics_by_period(){
 
 
 /**
- * ´Ëº¯ÊıÓÃÓÚÍ³¼Æ²¢ÏÔÊ¾·ûºÏÌõ¼şµÄ¼ÇÂ¼£¬Á½±ßµÄ¶ËµãÊÇ°üÀ¨ÔÚÄÚµÄ¡£
- * Ä¬ÈÏÊäÈëµÄÈÕÆÚÊÇºÏ·¨µÄ ÇÒ startÓëendÊÇÍ¬Ò»Ìì£¬»òÕßstartÔÚendÖ®Ç°
+ * æ­¤å‡½æ•°ç”¨äºç»Ÿè®¡å¹¶æ˜¾ç¤ºç¬¦åˆæ¡ä»¶çš„è®°å½•ï¼Œä¸¤è¾¹çš„ç«¯ç‚¹æ˜¯åŒ…æ‹¬åœ¨å†…çš„ã€‚
+ * é»˜è®¤è¾“å…¥çš„æ—¥æœŸæ˜¯åˆæ³•çš„ ä¸” startä¸endæ˜¯åŒä¸€å¤©ï¼Œæˆ–è€…startåœ¨endä¹‹å‰
  */
 void calculate_and_show_data(char* argu, int start_year, int start_month, int start_day, int end_year, int end_month, int end_day){
-    //±éÀúÁ´±íÖĞËùÓĞµÄÔªËØ£¬ÕÒ³ö·ûºÏÌõ¼şµÄ¼ÇÂ¼£¬Êä³ö²¢Í³¼Æ
+    //éå†é“¾è¡¨ä¸­æ‰€æœ‰çš„å…ƒç´ ï¼Œæ‰¾å‡ºç¬¦åˆæ¡ä»¶çš„è®°å½•ï¼Œè¾“å‡ºå¹¶ç»Ÿè®¡
     value_and_kind all_statistics[kind-1];
     double total_value = 0;
     double income = 0;
@@ -340,7 +341,7 @@ void calculate_and_show_data(char* argu, int start_year, int start_month, int st
                 beginning->data.month, beginning->data.day, end_year, end_month, end_day) <=0){
             counter++;
             if(counter == 1){
-                printf("%-5s %-10s %-20s %-12s %-6s\n","ĞòºÅ","ÈÕÆÚ", "ÏîÄ¿", "½ğ¶î", "ÀàĞÍ");
+                printf("%-5s %-10s %-20s %-12s %-6s\n","åºå·","æ—¥æœŸ", "é¡¹ç›®", "é‡‘é¢", "ç±»å‹");
             }
             show_finance_node_by_pointer(beginning);
             for(int i = 1; i<kind; i++){
@@ -361,11 +362,11 @@ void calculate_and_show_data(char* argu, int start_year, int start_month, int st
         (all_statistics[i]).percentage = (all_statistics[i]).value/total_value;
     }
 
-    //ÅÅĞò²¢Êä³öÍ³¼Æ½á¹û
-    printf("\nÔÚ%s£º\n", argu);
-    printf("ÊÕÈë£º%.2lf\n", income);
-    printf("Ö§³ö£º%.2lf\n", total_value);
-    printf("ÆäÖĞ¸÷ÏîÕ¼±È£º\n");
+    //æ’åºå¹¶è¾“å‡ºç»Ÿè®¡ç»“æœ
+    printf("\nåœ¨%sï¼š\n", argu);
+    printf("æ”¶å…¥ï¼š%.2lf\n", income);
+    printf("æ”¯å‡ºï¼š%.2lf\n", total_value);
+    printf("å…¶ä¸­å„é¡¹å æ¯”ï¼š\n");
 
     sort_statistics(all_statistics, kind-1);
     show_statistics(all_statistics, kind-1);
@@ -373,7 +374,7 @@ void calculate_and_show_data(char* argu, int start_year, int start_month, int st
 }
 
 void show_statistics(value_and_kind* all_statistics, int len){
-    printf("%-6s%-15s%s","Àà±ğ", "½ğ¶î","Õ¼×ÜÖ§³ö°Ù·Ö±È\n");
+    printf("%-6s%-15s%s","ç±»åˆ«", "é‡‘é¢","å æ€»æ”¯å‡ºç™¾åˆ†æ¯”\n");
     for(int i = 0; i<len; i++){
         printf("%-6s%-10.2lf%.2lf%c\n", all_statistics[i].category, all_statistics[i].value, all_statistics[i].percentage*100, '%');
     }
@@ -381,7 +382,7 @@ void show_statistics(value_and_kind* all_statistics, int len){
 }
 
 /**
- * ÒÔ½µĞòÅÅĞò
+ * ä»¥é™åºæ’åº
  * @param ori
  */
 void sort_statistics(struct value_and_kind* ori, int len){
@@ -392,7 +393,7 @@ void sort_statistics(struct value_and_kind* ori, int len){
                 tem = &(ori[j]);
             }
         }
-        //½»»»ori[i]Óëtem
+        //äº¤æ¢ori[i]ä¸tem
         value_and_kind swap = ori[i];
         ori[i] = *tem;
         *tem = swap;
@@ -401,7 +402,7 @@ void sort_statistics(struct value_and_kind* ori, int len){
 
 /**
  *
- * @return Èç¹ûÈÕÆÚ1ÔÚÈÕÆÚ2Ö®Ç°£¬·µ»Ø-1£¬ÈÕÆÚ1ÓëÈÕÆÚ2ÊÇÍ¬Ò»Ìì·µ»Ø0£¬ÈÕÆÚ1ÔÚÈÕÆÚ2Ö®ºó·µ»Ø1£»
+ * @return å¦‚æœæ—¥æœŸ1åœ¨æ—¥æœŸ2ä¹‹å‰ï¼Œè¿”å›-1ï¼Œæ—¥æœŸ1ä¸æ—¥æœŸ2æ˜¯åŒä¸€å¤©è¿”å›0ï¼Œæ—¥æœŸ1åœ¨æ—¥æœŸ2ä¹‹åè¿”å›1ï¼›
  */
 int date_cmp(int year1, int month1, int day1, int year2, int month2, int day2){
     if(year1<year2){
@@ -417,18 +418,18 @@ int date_cmp(int year1, int month1, int day1, int year2, int month2, int day2){
     }
 }
 
-//´Ó±¾µØÎÄ¼şÖĞ¶ÁÈ¡ÓÃ»§µÄÊÕÈë/Ö§³ö¼ÇÂ¼
+//ä»æœ¬åœ°æ–‡ä»¶ä¸­è¯»å–ç”¨æˆ·çš„æ”¶å…¥/æ”¯å‡ºè®°å½•
 void initialize_linklist(int user_id){
 
     char file_name[20];
     sprintf(file_name, "%d%s", user_id, "_finance.txt");
     FILE* fp = NULL;
-    //´Ëº¯ÊıµÄ¹¦ÄÜÖ»ÊÇ¶ÁÈ¡¼ÇÂ¼£¬ËùÒÔÓÃrb´ò¿ªÎÄ¼ş
+    //æ­¤å‡½æ•°çš„åŠŸèƒ½åªæ˜¯è¯»å–è®°å½•ï¼Œæ‰€ä»¥ç”¨rbæ‰“å¼€æ–‡ä»¶
     fp = fopen(file_name, "rb");
     if(fp == NULL){
         fp = fopen(file_name, "wb+");
         if(fp == NULL){
-            printf("ÎÄ¼ş´ò¿ªÊ§°Ü£¡\n");
+            printf("æ–‡ä»¶æ‰“å¼€å¤±è´¥ï¼\n");
         }
         return;
     }
@@ -495,13 +496,13 @@ void write_all_linkedlist_to_file(FILE* fp){
 }
 
 void show_all_finance_node(){
-    printf("%-5s %-10s %-20s %-12s %-6s\n","ĞòºÅ","ÈÕÆÚ", "ÏîÄ¿", "½ğ¶î", "ÀàĞÍ");
+    printf("%-5s %-10s %-20s %-12s %-6s\n","åºå·","æ—¥æœŸ", "é¡¹ç›®", "é‡‘é¢", "ç±»å‹");
     for(finance_node* beginning = finance_head; beginning != NULL; beginning = beginning->next){
         char date[10];
         sprintf(date,"%d.%d.%d", beginning->data.year, beginning->data.month, beginning->data.day);
 
         if( (strcmp(beginning->data.category, CATEGORY[0])) == 0){
-            printf("%-5d %-10s %-20s %-10.2lf\n", beginning->lable, date, "ÊÕÈë", beginning->data.value);
+            printf("%-5d %-10s %-20s %-10.2lf\n", beginning->lable, date, "æ”¶å…¥", beginning->data.value);
         }else{
             printf("%-5d %-10s %-20s %-10.2lf %-6s\n", beginning->lable, date, beginning->data.name, beginning->data.value, beginning->data.category);
         }
@@ -521,7 +522,7 @@ void show_finance_node_by_pointer(finance_node* node){
     sprintf(date,"%d.%d.%d", node->data.year, node->data.month, node->data.day);
 
     if( (strcmp(node->data.category, CATEGORY[0])) == 0){
-        printf("%-5d %-10s %-20s %-10.2lf\n", node->lable, date, "ÊÕÈë", node->data.value);
+        printf("%-5d %-10s %-20s %-10.2lf\n", node->lable, date, "æ”¶å…¥", node->data.value);
     }else{
         printf("%-5d %-10s %-20s %-10.2lf %-6s\n", node->lable, date, node->data.name,
                 node->data.value, node->data.category);
